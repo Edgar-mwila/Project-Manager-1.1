@@ -4,6 +4,9 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../config/firebase.config.ts';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { User, UserRole } from '../../interfaces/ProjectManager-interfaces.ts';
+import { setUser } from '../../store/slices/userSlice.ts';
+import { useDispatch } from 'react-redux';
 
 const RegisterContainer = styled.div`
   max-width: 400px;
@@ -80,6 +83,7 @@ const Register= () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -89,9 +93,11 @@ const Register= () => {
     }
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      navigate('/projects');
+      dispatch(setUser({ id: "1", email: email, role: UserRole.Developer } as User));
+      navigate('/');
     } catch (error) {
       setError('Failed to create an account. Please try again.');
+      console.log('error registering: ', error);
     }
   };
 

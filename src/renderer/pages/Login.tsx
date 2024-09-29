@@ -4,6 +4,9 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../config/firebase.config.ts';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { setUser } from '../../store/slices/userSlice.ts';
+import { User, UserRole } from '../../interfaces/ProjectManager-interfaces.ts';
+import { useDispatch } from 'react-redux';
 
 const LoginContainer = styled.div`
   max-width: 400px;
@@ -79,12 +82,14 @@ const Login= () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      navigate('/projects');
+      dispatch(setUser({ id: "1", email: email, role: UserRole.Developer } as User));
+      navigate('/');
     } catch (error) {
       setError('Invalid email or password. Please try again.');
     }

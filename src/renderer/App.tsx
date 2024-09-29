@@ -7,12 +7,15 @@ import ProjectList from './pages/ProjectList.tsx';
 import Teams from './pages/Teams.tsx';
 import ManageProject from './pages/ManageProjects.tsx';
 import ManageTeamProject from './pages/ManageTeamProjects.tsx';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store/index.ts';
 
 const App = () => {
-  // TODO: Implement an authentication check
+  const currentUser = useSelector((state: RootState) => state.user.currentUser);
+  
   const isAuthenticated = () => {
     // Replace this with your actual authentication check
-    return localStorage.getItem('authToken') !== null;
+    return currentUser !== null;
   };
 
   return (
